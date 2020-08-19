@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.michstabe.dao.ArticleMapper">
+    <resultMap id="BaseResultMap" type="com.lemon.michstabe.entity.Article">
+        <id column="article_id" jdbcType="VARCHAR" property="articleId"/>
+        <result column="article_alias" jdbcType="VARCHAR" property="articleAlias"/>
+        <result column="article_title" jdbcType="VARCHAR" property="articleTitle"/>
+        <result column="article_img" jdbcType="VARCHAR" property="articleImg"/>
+        <result column="article_basic" jdbcType="VARCHAR" property="articleBasic"/>
+        <result column="article_create_date" jdbcType="VARCHAR" property="articleCreateDate"/>
+        <result column="article_last_update_date" jdbcType="VARCHAR" property="articleLastUpdateDate"/>
+        <result column="article_protect" jdbcType="VARCHAR" property="articleProtect"/>
+        <result column="article_protect_alias" jdbcType="VARCHAR" property="articleProtectAlias"/>
+        <result column="article_stick" jdbcType="INTEGER" property="articleStick"/>
+        <result column="article_state" jdbcType="INTEGER" property="articleState"/>
+        <result column="article_state_alias" jdbcType="VARCHAR" property="articleStateAlias"/>
+        <result column="article_like_count" jdbcType="INTEGER" property="articleLikeCount"/>
+        <result column="article_sick_of_count" jdbcType="INTEGER" property="articleSickOfCount"/>
+        <result column="article_html_content" jdbcType="LONGVARCHAR" property="articleHtmlContent"/>
+        <result column="article_markdown_content" jdbcType="LONGVARCHAR" property="articleMarkdownContent"/>
+        <collection property="tags" resultMap="com.lemon.michstabe.dao.TagMapper.BaseResultMap"></collection>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="string">
+    DELETE FROM article WHERE article.article_id = #{articleId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.lemon.michstabe.entity.Article" useGeneratedKeys="true"
+            keyProperty="articleId">
+    insert into article (article_id, article_alias, article_title, article_basic,
+        article_create_date, article_last_update_date,article_protect, article_stick,
+        article_state, article_html_content, article_markdown_content)
+    values (#{articleId,jdbcType=VARCHAR} ,#{articleAlias,jdbcType=VARCHAR}, #{articleTitle,jdbcType=VARCHAR},
+      #{articleBasic,jdbcType=VARCHAR},#{articleCreateDate,jdbcType=VARCHAR},
+      #{articleLastUpdateDate,jdbcType=VARCHAR}, #{articleProtect,jdbcType=VARCHAR}, #{articleStick,jdbcType=INTEGER},
+      #{articleState,jdbcType=INTEGER}, #{articleHtmlContent,jdbcType=LONGVARCHAR}, #{articleMarkdownContent,jdbcType=LONGVARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.lemon.michstabe.entity.Article">
+    update article
+    set
+      article_title = #{articleTitle,jdbcType=VARCHAR},
+      article_basic = #{articleBasic,jdbcType=VARCHAR},
+      article_last_update_date = #{articleLastUpdateDate,jdbcType=VARCHAR},
+      article_protect = #{articleProtect,jdbcType=VARCHAR},
+      article_stick = #{articleStick,jdbcType=INTEGER},
+      article_state = #{articleState,jdbcType=INTEGER},
+      article_html_content = #{articleHtmlContent,jdbcType=LONGVARCHAR},
+      article_markdown_content = #{articleMarkdownContent,jdbcType=LONGVARCHAR}
+    where article_id = #{articleId,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="string" resultMap="BaseResultMap">
+    select * from article
+    where article_id = #{articleId,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT article.article_id, article.article_alias, article.article_title, article.article_basic, article.article_html_content, article.article_markdown_content, article.article_create_date, article.article_last_update_date,
+        article.article_protect, article.article_stick, tag_relation_article.tag_relation_article_id, tag_relation_article.tag_id, tag.tag_name, tag.tag_describe, article.article_state,
+        case
+        when article.article_state = 0 then '显示'
+        when article.article_state = 1 then '隐藏'
+        END article_state_alias,
+        case
+        when article.article_protect = '' then '未加密'
+        when article.article_protect != '' then '加密'
+        END article_protect_alias
+        FROM article LEFT JOIN tag_relation_article ON article.article_id = tag_relation_article.article_id LEFT JOIN tag ON tag.tag_id = tag_relation_article.tag_id
+        ORDER BY article.article_stick DESC
+  </select>
+    <select id="selectArticleByPageToBasic" resultMap="BaseResultMap">
+        SELECT article.article_id, article.article_alias, article.article_title, article.article_create_date,
+        article.article_protect, article.article_stick, article.article_state,
+        case
+        when article.article_protect = '' then article.article_basic
+        when article.article_protect != '' then '此文章被加密徐密码访问...'
+        END 'article_basic'
+        FROM article WHERE article.article_state = 0
+        ORDER BY article.article_stick, article.article_create_date DESC
+    </select>
+    <select id="selectByArticleAlias" resultMap="BaseResultMap">
+        SELECT article.article_id, article.article_alias, article.article_title, article.article_basic, article.article_html_content, article.article_markdown_content, article.article_create_date, article.article_last_update_date,
+        article.article_protect, article.article_stick, tag_relation_article.tag_relation_article_id, tag_relation_article.tag_id, tag.tag_name, tag.tag_describe, article.article_state
+        FROM article LEFT JOIN tag_relation_article ON article.article_id = tag_relation_article.article_id LEFT JOIN tag ON tag.tag_id = tag_relation_article.tag_id
+        where article.article_alias = #{articleAlias}
+    </select>
+    <select id="selectDimByAll" resultMap="BaseResultMap">
+       SELECT * FROM
+        (
+            SELECT article.article_id, article.article_alias, article.article_title, article.article_basic, article.article_html_content, article.article_markdown_content, article.article_create_date, article.article_last_update_date,
+            article.article_protect, article.article_stick, tag_relation_article.tag_relation_article_id, tag_relation_article.tag_id, tag.tag_name, tag.tag_describe, article.article_state,
+            case
+            when article.article_state = 0 then '显示'
+            when article.article_state = 1 then '隐藏'
+            END article_state_alias,
+            case
+            when article.article_protect = '' then '未加密'
+            when article.article_protect != '' then '加密'
+            END article_protect_alias
+            FROM article LEFT JOIN tag_relation_article ON article.article_id = tag_relation_article.article_id LEFT JOIN tag ON tag.tag_id = tag_relation_article.tag_id
+        ) a
+        WHERE a.article_id IN (
+            SELECT a.article_id FROM
+            (
+                SELECT article.*,
+                case
+                when article.article_state = 0 then '显示'
+                when article.article_state = 1 then '隐藏'
+                END article_state_alias,
+                case
+                when article.article_protect = '' then '未加密'
+                when article.article_protect != '' then '加密'
+                END article_protect_alias
+                FROM article
+            ) a WHERE upper(a.article_title) LIKE UPPER(CONCAT(CONCAT('%',#{dimStr},'%'))) OR upper(a.article_markdown_content) LIKE UPPER(CONCAT(CONCAT('%',#{dimStr},'%')))  OR upper(a.article_state_alias) LIKE UPPER(CONCAT(CONCAT('%',#{dimStr},'%'))) OR a.article_protect_alias = #{dimStr}
+        ) OR a.tag_id IN (
+            SELECT tag.tag_id FROM tag WHERE  upper(tag.tag_name) = UPPER(CONCAT(CONCAT('%',#{dimStr},'%')))
+        ) OR a.article_id IN (
+            SELECT tag_relation_article.article_id FROM tag_relation_article WHERE tag_relation_article.tag_id IN (SELECT tag.tag_id FROM tag WHERE upper(tag.tag_name) LIKE UPPER(CONCAT(CONCAT('%',#{dimStr},'%'))))
+        )
+    </select>
+    <select id="getCurrentAdjacentArticleByArticleAlias" resultType="com.lemon.michstabe.entity.Article">
+        SELECT article.article_alias, article.article_title FROM article ORDER BY article.article_create_date DESC
+    </select>
+</mapper>

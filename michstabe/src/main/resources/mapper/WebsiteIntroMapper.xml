@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.michstabe.dao.WebsiteIntroMapper">
+  <resultMap id="BaseResultMap" type="com.lemon.michstabe.entity.WebsiteIntro">
+    <id column="website_intro_id" jdbcType="INTEGER" property="websiteIntroId" />
+    <result column="website_intro_logo" jdbcType="VARCHAR" property="websiteIntroLogo" />
+    <result column="website_intro_main_bg" jdbcType="VARCHAR" property="websiteIntroMainBg" />
+    <result column="website_intro_blog_bg" jdbcType="VARCHAR" property="websiteIntroBlogBg" />
+    <result column="website_intro_foreword" jdbcType="VARCHAR" property="websiteIntroForeword" />
+    <result column="website_intro_markdown_describe" jdbcType="LONGVARCHAR" property="websiteIntroMarkdownDescribe" />
+    <result column="website_intro_html_describe" jdbcType="LONGVARCHAR" property="websiteIntroHtmlDescribe" />
+  </resultMap>
+  <update id="updateByPrimaryKey" parameterType="com.lemon.michstabe.entity.WebsiteIntro">
+    update website_intro
+    set website_intro_foreword = #{websiteIntroForeword,jdbcType=VARCHAR},
+        website_intro_markdown_describe = #{websiteIntroMarkdownDescribe,jdbcType=LONGVARCHAR},
+        website_intro_html_describe = #{websiteIntroHtmlDescribe,jdbcType=LONGVARCHAR}
+    where website_intro_id = #{websiteIntroId,jdbcType=INTEGER}
+  </update>
+  <select id="selectWebsiteInto" resultType="com.lemon.michstabe.entity.WebsiteIntro">
+    SELECT * FROM `website_intro` LIMIT 1
+  </select>
+
+</mapper>

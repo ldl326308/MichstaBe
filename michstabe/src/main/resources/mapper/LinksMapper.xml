@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.michstabe.dao.LinksMapper">
+    <resultMap id="BaseResultMap" type="com.lemon.michstabe.entity.Links">
+        <id column="links_id" jdbcType="INTEGER" property="linksId"/>
+        <result column="links_name" jdbcType="VARCHAR" property="linksName"/>
+        <result column="links_img" jdbcType="VARCHAR" property="linksImg"/>
+        <result column="links_site" jdbcType="VARCHAR" property="linksSite"/>
+        <result column="links_describe" jdbcType="VARCHAR" property="linksDescribe"/>
+        <result column="links_state" jdbcType="INTEGER" property="linksState"/>
+        <result column="links_state_alias" jdbcType="VARCHAR" property="linksStateAlias"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from links
+    where links_id = #{linksId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.lemon.michstabe.entity.Links">
+    insert into links (links_name, links_img,
+      links_site, links_describe, links_state
+      )
+    values (#{linksName,jdbcType=VARCHAR}, #{linksImg,jdbcType=VARCHAR},
+      #{linksSite,jdbcType=VARCHAR}, #{linksDescribe,jdbcType=VARCHAR}, #{linksState,jdbcType=INTEGER}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.lemon.michstabe.entity.Links">
+    update links
+    set links_name = #{linksName,jdbcType=VARCHAR},
+      links_img = #{linksImg,jdbcType=VARCHAR},
+      links_site = #{linksSite,jdbcType=VARCHAR},
+      links_describe = #{linksDescribe,jdbcType=VARCHAR},
+      links_state = #{linksState,jdbcType=INTEGER}
+    where links_id = #{linksId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select links_id, links_name, links_img, links_site, links_describe, links_state
+    from links
+    where links_id = #{linksId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select links_id, links_name, links_img, links_site, links_describe, links_state,
+    case
+    when links_state = 0 then '显示'
+    when links_state = 1 then '隐藏'
+    END links_state_alias
+    from links
+  </select>
+    <select id="selectDimByAll" resultType="com.lemon.michstabe.entity.Links">
+    SELECT * FROM
+    (
+    select links_id, links_name, links_img, links_site, links_describe, links_state,
+    case
+    when links_state = 0 then '显示'
+    when links_state = 1 then '隐藏'
+    END links_state_alias
+    from links
+    ) AS a WHERE a.links_name LIKE CONCAT(CONCAT('%', #{dimStr}), '%') OR a.links_site LIKE CONCAT(CONCAT('%', #{dimStr}), '%') OR a.links_describe LIKE CONCAT(CONCAT('%', #{dimStr}), '%') OR a.links_state_alias LIKE CONCAT(CONCAT('%', #{dimStr}), '%')
+    </select>
+</mapper>

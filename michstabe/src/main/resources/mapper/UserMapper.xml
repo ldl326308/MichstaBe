@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lemon.michstabe.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.lemon.michstabe.entity.User">
+        <id column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_nickname" jdbcType="VARCHAR" property="userNickname"/>
+        <result column="user_account" jdbcType="VARCHAR" property="userAccount"/>
+        <result column="user_password" jdbcType="VARCHAR" property="userPassword"/>
+        <result column="user_email" jdbcType="VARCHAR" property="userEmail"/>
+        <result column="user_portrait" jdbcType="VARCHAR" property="userPortrait"/>
+        <result column="user_signature" jdbcType="VARCHAR" property="userSignature"/>
+        <result column="user_create_date" jdbcType="VARCHAR" property="userCreateDate"/>
+        <result column="user_birthday" jdbcType="VARCHAR" property="userBirthday"/>
+        <result column="user_gender" jdbcType="VARCHAR" property="userGender"/>
+        <result column="user_address" jdbcType="VARCHAR" property="userAddress"/>
+        <result column="user_position" jdbcType="VARCHAR" property="userPosition"/>
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone"/>
+        <result column="user_qq" jdbcType="VARCHAR" property="userQq"/>
+        <result column="user_markdown_introduce" jdbcType="LONGVARCHAR" property="userMarkdownIntroduce"/>
+        <result column="user_html_introduce" jdbcType="LONGVARCHAR" property="userHtmlIntroduce"/>
+        <result column="user_whether_email" jdbcType="INTEGER" property="userWhetherEmail"/>
+        <result column="user_whether_gender" jdbcType="INTEGER" property="userWhetherGender"/>
+        <result column="user_whether_birthday" jdbcType="INTEGER" property="userWhetherBirthday"/>
+        <result column="user_whether_address" jdbcType="INTEGER" property="userWhetherAddress"/>
+        <result column="user_whether_position" jdbcType="INTEGER" property="userWhetherPosition"/>
+        <result column="user_whether_phone" jdbcType="INTEGER" property="userWhetherPhone"/>
+        <result column="user_whether_qq" jdbcType="INTEGER" property="userWhetherQq"/>
+        <result column="user_state" jdbcType="INTEGER" property="userState"/>
+    </resultMap>
+    <update id="updateByPrimaryKey" parameterType="com.lemon.michstabe.entity.User">
+    update user
+    set user_nickname = #{userNickname,jdbcType=VARCHAR},
+      user_account = #{userAccount,jdbcType=VARCHAR},
+      <if test="userPassword != ''">
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      user_email = #{userEmail,jdbcType=VARCHAR},
+      user_signature = #{userSignature,jdbcType=VARCHAR},
+      user_create_date = #{userCreateDate,jdbcType=VARCHAR},
+      user_birthday = #{userBirthday,jdbcType=VARCHAR},
+      user_gender = #{userGender,jdbcType=VARCHAR},
+      user_address = #{userAddress,jdbcType=VARCHAR},
+      user_position = #{userPosition,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_qq = #{userQq,jdbcType=VARCHAR},
+      user_markdown_introduce = #{userMarkdownIntroduce,jdbcType=LONGVARCHAR},
+      user_html_introduce = #{userHtmlIntroduce,jdbcType=LONGVARCHAR},
+      user_whether_email = #{userWhetherEmail,jdbcType=INTEGER},
+      user_whether_gender = #{userWhetherGender,jdbcType=INTEGER},
+      user_whether_birthday = #{userWhetherBirthday,jdbcType=INTEGER},
+      user_whether_address = #{userWhetherAddress,jdbcType=INTEGER},
+      user_whether_position = #{userWhetherPosition,jdbcType=INTEGER},
+      user_whether_phone = #{userWhetherPhone,jdbcType=INTEGER},
+      user_whether_qq = #{userWhetherQq,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=BIGINT}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select *
+    from user
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+    <select id="login" resultType="com.lemon.michstabe.entity.User">
+    select * from user where user_account = #{userAccount}
+  </select>
+    <select id="selectByUserAccount" resultType="com.lemon.michstabe.entity.User">
+        select * from user where user_account = #{userAccount}
+    </select>
+    <select id="selectByUser" resultType="com.lemon.michstabe.entity.User">
+        SELECT `user_id`, `user_nickname`, `user_account`, `user_email`, `user_portrait`, `user_signature`, `user_create_date`, `user_birthday`, `user_gender`, `user_address`, `user_position`,
+      `user_phone`, `user_qq`, `user_markdown_introduce`, `user_html_introduce`, `user_whether_email`, `user_whether_gender`, `user_whether_birthday`, `user_whether_address`, `user_whether_position`,
+      `user_whether_phone`, `user_whether_qq`, `user_state`, '' AS `user_password` FROM `user` LIMIT 1
+    </select>
+</mapper>
