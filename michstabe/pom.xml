@@ -25,12 +25,6 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <!-- 模板引擎 -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-thymeleaf</artifactId>-->
-<!--        </dependency>-->
-
         <!-- web服务 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,15 +44,6 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.12</version>
         </dependency>
-
-
-        <!-- 热部署  -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-devtools</artifactId>-->
-        <!--            <scope>runtime</scope>-->
-        <!--            <optional>true</optional>-->
-        <!--        </dependency>-->
 
         <!-- test  -->
         <dependency>
@@ -106,12 +91,12 @@
             <version>3.9</version>
         </dependency>
 
-        <!-- 内嵌Tomcat打包时忽略  -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-tomcat</artifactId>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
+        <!-- 内嵌Tomcat打包时忽略 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- 图片存储对接七牛云 -->
         <dependency>
@@ -119,7 +104,6 @@
             <artifactId>qiniu-java-sdk</artifactId>
             <version>7.2.28</version>
         </dependency>
-
 
 
     </dependencies>
@@ -143,6 +127,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.lemon.michstabe.MichstabeApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
